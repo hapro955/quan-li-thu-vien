@@ -17,7 +17,7 @@ namespace QuanLiThuVien
         public void OpenDB()
         {
             if (ConnectDB.connect == null)
-                ConnectDB.connect = new SqlConnection(@"Data Source=HAPRO955\SQLEXPRESS; Database=QLLTPM; Integrated Security=True");
+                ConnectDB.connect = new SqlConnection(@"Data Source=HAPRO955\SQLEXPRESS; Database=QL_THUVIEN; Integrated Security=True");
             if (ConnectDB.connect.State != ConnectionState.Open)
                 ConnectDB.connect.Open();
         }
