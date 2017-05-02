@@ -208,3 +208,42 @@ create table cuonsach(
 			set ma_docgia = dbo.func_nextID(@lastID,'DG',6)
 			where ma_docgia= ''
 	end
+	-- trigger mã phiếu mượn tự động tăng
+		create trigger trg_nextIDphieumuon on phieumuon for insert
+	as
+		begin
+			declare @lastID varchar(50)
+			set @lastID= (select top 1 ma_phieumuon from phieumuon order by ma_phieumuon desc)
+			update phieumuon
+			set ma_phieumuon = dbo.func_nextID(@lastID,'PM',6)
+			where ma_phieumuon= ''
+	end
+	--thêm phiếu mượn
+	create proc phieumuon_them
+		@mapm varchar(10), @madg varchar(10), @ngaym date, @ngayt date
+	as
+		begin
+			insert into phieumuon (ma_phieumuon, ma_docgia, ngaymuon, ngaytra) values(@mapm, @madg, @ngaym, @ngayt)
+		end
+	--sửa phiếu mượn
+	create proc phieumuon_sua
+		@mapm varchar(10), @madg varchar(10), @ngaym date, @ngayt date
+	as
+		begin
+			update phieumuon
+			set ma_docgia=@madg, ngaymuon=@ngaym, ngaytra= @ngayt
+			where ma_phieumuon=@mapm
+		end
+	-- xóa phiếu mượn
+	create proc phieumuon_xoa
+			@ma varchar(10)
+		as
+			begin 
+					if @ma in (select ma_phieumuon from cuonsach)
+						print N'Phiếu mượn đang chứa sách. Không thể xóa!!'
+					else
+						begin
+							delete from phieumuon
+							where ma_phieumuon=@ma
+						end
+			end
