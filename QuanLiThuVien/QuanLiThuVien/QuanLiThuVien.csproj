@@ -46,6 +46,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectDB.cs" />
+    <Compile Include="DOCGIA.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DOCGIA.Designer.cs">
+      <DependentUpon>DOCGIA.cs</DependentUpon>
+    </Compile>
     <Compile Include="NHOMSACH.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -54,6 +60,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DOCGIA.resx">
+      <DependentUpon>DOCGIA.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="NHOMSACH.resx">
       <DependentUpon>NHOMSACH.cs</DependentUpon>
     </EmbeddedResource>

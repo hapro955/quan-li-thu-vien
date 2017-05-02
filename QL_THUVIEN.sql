@@ -24,10 +24,10 @@ alter table dausach add   tendausach nvarchar(100) null
 create table docgia(
 	ma_docgia varchar(10) not null,
 	hoten nvarchar(50) not null,
-	hinhanh image null,
 	sodienthoai varchar(15) null,
 	primary key(ma_docgia)
 )
+alter table docgia add hinhanh varchar(20) null
 --bang the doc gia
 create table thedocgia(
 	ma_thedocgia varchar(10) not null,
@@ -169,3 +169,42 @@ create table cuonsach(
 					where ma_dausach= @ma
 				end
 		end
+	-- thêm độc giả
+	create proc docgia_them
+		@ma varchar(10), @hoten nvarchar(50), @sdt varchar(15), @hinhanh varchar(20)
+	as
+		begin
+			insert into docgia (ma_docgia, hoten, sodienthoai, hinhanh) values(@ma, @hoten, @sdt, @hinhanh)
+		end
+		-- sửa độc giả
+	create proc docgia_sua
+		@ma varchar(10), @hoten nvarchar(50), @sdt varchar(15), @hinhanh varchar(20)
+	as
+		begin
+			update docgia
+			set hoten=@hoten, sodienthoai = @sdt, hinhanh=@hinhanh
+			where ma_docgia=@ma
+		end
+		--xóa độc giả
+		create proc docgia_xoa
+			@ma varchar(10)
+		as
+			begin 
+					if @ma in (select ma_docgia from phieumuon)
+						print N'Độc giả đang có phiếu mượn. Không thể xóa!!'
+					else
+						begin
+							delete from docgia
+							where ma_docgia=@ma
+						end
+			end
+	--trigger mã độc giả tự động tăng
+	create trigger trg_nextIDdocgia on docgia for insert
+	as
+		begin
+			declare @lastID varchar(50)
+			set @lastID= (select top 1 ma_docgia from docgia order by ma_docgia desc)
+			update docgia
+			set ma_docgia = dbo.func_nextID(@lastID,'DG',6)
+			where ma_docgia= ''
+	end
