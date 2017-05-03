@@ -247,3 +247,39 @@ create table cuonsach(
 							where ma_phieumuon=@ma
 						end
 			end
+	-- trigger mã thẻ độc giả tự động tăng
+		create trigger trg_nextIDthedocgia on thedocgia for insert
+	as
+		begin
+			declare @lastID varchar(50)
+			set @lastID= (select top 1 ma_thedocgia from thedocgia order by ma_thedocgia desc)
+			update thedocgia
+			set ma_thedocgia = dbo.func_nextID(@lastID,'THE',6)
+			where ma_thedocgia= ''
+	end
+	-- thêm thẻ độc giả
+	create proc thedocgia_them
+		@matdg varchar(10), @madg varchar(10), @ngaylt date, @ngayhh date
+	as
+		begin
+			insert into thedocgia (ma_thedocgia,ma_docgia,ngaylamthe, ngayhethan) values(@matdg, @madg, @ngaylt,@ngayhh)
+		end
+	-- sửa thẻ độc giả
+		create proc thedocgia_sua
+		@matdg varchar(10), @madg varchar(10), @ngaylt date, @ngayhh date
+	as
+		begin
+			update thedocgia
+			set ma_docgia=@madg, ngaylamthe= @ngaylt, ngayhethan = @ngayhh
+			where ma_thedocgia=@matdg
+		end
+		-- xóa thẻ độc giả
+		create proc thedocgia_xoa
+			@ma varchar(10)
+		as
+			
+						begin
+							delete from thedocgia
+							where ma_thedocgia=@ma
+						end
+			
