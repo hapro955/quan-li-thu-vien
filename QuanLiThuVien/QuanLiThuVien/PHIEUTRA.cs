@@ -10,11 +10,11 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 namespace QuanLiThuVien
 {
-    public partial class PHIEUMUON : Form
+    public partial class PHIEUTRA : Form
     {
         ConnectDB conn = new ConnectDB();
         bool themmoi;
-        public PHIEUMUON()
+        public PHIEUTRA()
         {
             InitializeComponent();
         }
@@ -25,12 +25,12 @@ namespace QuanLiThuVien
         }
         void KhoaDieuKhien()
         {
-            txtMadocgia.Enabled = false;
-            txtMaphieumuon.Enabled = false;
-            dtpNgaymuon.Enabled = false;
-            dtpNgaytra.Enabled = false;
+            txtMaphieutra.Enabled = false;
+            txtMaphieumuon1.Enabled = false;
+            txtTienPhat.Enabled = false;
+            dtpNgaytrathat.Enabled = false;
 
-            bntThem.Enabled = true;
+            btnThem.Enabled = true;
             btnSua.Enabled = true;
             btnXoa.Enabled = true;
             btnLuu.Enabled = false;
@@ -39,12 +39,13 @@ namespace QuanLiThuVien
         }
         void MoDieuKhien()
         {
-            txtMadocgia.Enabled = true;
-            txtMaphieumuon.Enabled = true;
-            dtpNgaymuon.Enabled = true;
-            dtpNgaytra.Enabled = true;
+            txtMaphieutra.Enabled = true;
+            txtMaphieumuon1.Enabled = true;
+            txtTienPhat.Enabled = true;
+            dtpNgaytrathat.Enabled = true;
 
-            bntThem.Enabled = false;
+
+            btnThem.Enabled = false;
             btnSua.Enabled = false;
             btnXoa.Enabled = false;
             btnLuu.Enabled = true;
@@ -53,39 +54,35 @@ namespace QuanLiThuVien
         }
         void setNull()
         {
-            txtMadocgia.Text = "Mã độc giả";
-            txtMaphieumuon.Text = "Mã phiếu mượn";
+            txtMaphieutra.Text = "Mã phiếu trả";
+            txtMaphieumuon1.Text = "Mã phiếu mượn";
+            txtTienPhat.Text = "0";
         }
         public void LoadData()
         {
-            string sql = "select * from phieumuon";
+            string sql = "select * from phieutra";
             DataTable dt = new DataTable();
             dt = conn.GetDataTable(sql);
-            dgvPhieumuon.DataSource = dt;
+            dgvPhieuTra.DataSource = dt;
         }
-        private void PHIEUMUON_Load(object sender, EventArgs e)
+
+        private void PHIEUTRA_Load(object sender, EventArgs e)
         {
             LoadData();
             KhoaDieuKhien();
             setNull();
         }
 
-        private void btnHuy_Click(object sender, EventArgs e)
+        private void dgvPhieuTra_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            KhoaDieuKhien();
-            setNull();
-        }
-
-        private void dgvPhieumuon_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
+             try
             {
                 if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
-                {                   
-                    txtMaphieumuon.Text = Convert.ToString(dgvPhieumuon.CurrentRow.Cells[1].Value);
-                    txtMadocgia.Text = Convert.ToString(dgvPhieumuon.CurrentRow.Cells[2].Value);
-                    dtpNgaymuon.Text = Convert.ToString(dgvPhieumuon.CurrentRow.Cells[3].Value);
-                    dtpNgaytra.Text = Convert.ToString(dgvPhieumuon.CurrentRow.Cells[4].Value);
+                {
+                    txtMaphieutra.Text = Convert.ToString(dgvPhieuTra.CurrentRow.Cells[1].Value);
+                    txtMaphieumuon1.Text = Convert.ToString(dgvPhieuTra.CurrentRow.Cells[2].Value);
+                    dtpNgaytrathat.Text = Convert.ToString(dgvPhieuTra.CurrentRow.Cells[3].Value);
+                    txtTienPhat.Text = Convert.ToString(dgvPhieuTra.CurrentRow.Cells[4].Value);
                 }
             }
             catch
@@ -94,27 +91,26 @@ namespace QuanLiThuVien
             }
         }
 
-        private void dgvPhieumuon_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        private void dgvPhieuTra_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
-            dgvPhieumuon.Rows[e.RowIndex].Cells[0].Value = e.RowIndex + 1;
+            dgvPhieuTra.Rows[e.RowIndex].Cells[0].Value = e.RowIndex + 1;
         }
 
-        private void bntThem_Click(object sender, EventArgs e)
+        private void btnThem_Click(object sender, EventArgs e)
         {
             themmoi = true;
             MoDieuKhien();
             setNull();
-            txtMaphieumuon.Enabled = false;
-            txtMaphieumuon.Text = "";
-            txtMadocgia.Text = "";
-
+            txtMaphieutra.Enabled = false;
+            txtMaphieutra.Text = "";
+            txtMaphieumuon1.Text = "";
         }
 
         private void btnSua_Click(object sender, EventArgs e)
         {
             themmoi = false;
             MoDieuKhien();
-            txtMaphieumuon.Enabled = false;
+            txtMaphieutra.Enabled = false;
         }
 
         private void btnLuu_Click(object sender, EventArgs e)
@@ -125,15 +121,15 @@ namespace QuanLiThuVien
                 int count = 0;
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("phieumuon_them", ConnectDB.connect);
+                    SqlCommand cmd = new SqlCommand("phieutra_them", ConnectDB.connect);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    SqlParameter p = new SqlParameter("@mapm", Convert.ToString(txtMaphieumuon.Text));
+                    SqlParameter p = new SqlParameter("@mapt", Convert.ToString(txtMaphieutra.Text));
                     cmd.Parameters.Add(p);
-                    p = new SqlParameter("@madg", Convert.ToString(txtMadocgia.Text));
+                    p = new SqlParameter("@mapm", Convert.ToString(txtMaphieumuon1.Text));
                     cmd.Parameters.Add(p);
-                    p = new SqlParameter("@ngaym", Convert.ToString(dtpNgaymuon.Value));
+                    p = new SqlParameter("@ngaytrathat", Convert.ToString(dtpNgaytrathat.Value));
                     cmd.Parameters.Add(p);
-                    p = new SqlParameter("@ngayt", Convert.ToString(dtpNgaytra.Value));
+                    p = new SqlParameter("@tienphat", Convert.ToInt16(txtTienPhat.Text));
                     cmd.Parameters.Add(p);
                     count = cmd.ExecuteNonQuery();
                 }
@@ -159,15 +155,15 @@ namespace QuanLiThuVien
                 try
                 {
 
-                    SqlCommand cmd = new SqlCommand("phieumuon_sua", ConnectDB.connect);
+                    SqlCommand cmd = new SqlCommand("phieutra_sua", ConnectDB.connect);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    SqlParameter p = new SqlParameter("@mapm", Convert.ToString(txtMaphieumuon.Text));
+                    SqlParameter p = new SqlParameter("@mapt", Convert.ToString(txtMaphieutra.Text));
                     cmd.Parameters.Add(p);
-                    p = new SqlParameter("@madg", Convert.ToString(txtMadocgia.Text));
+                    p = new SqlParameter("@mapm", Convert.ToString(txtMaphieumuon1.Text));
                     cmd.Parameters.Add(p);
-                    p = new SqlParameter("@ngaym", Convert.ToString(dtpNgaymuon.Value));
+                    p = new SqlParameter("@ngaytrathat", Convert.ToString(dtpNgaytrathat.Value));
                     cmd.Parameters.Add(p);
-                    p = new SqlParameter("@ngayt", Convert.ToString(dtpNgaytra.Value));
+                    p = new SqlParameter("@tienphat", Convert.ToInt16(txtTienPhat.Text));
                     cmd.Parameters.Add(p);
                     count = cmd.ExecuteNonQuery();
 
@@ -195,9 +191,9 @@ namespace QuanLiThuVien
             int count = 0;
             try
             {
-                SqlCommand cmd = new SqlCommand("phieumuon_xoa", ConnectDB.connect);
+                SqlCommand cmd = new SqlCommand("phieutra_xoa", ConnectDB.connect);
                 cmd.CommandType = CommandType.StoredProcedure;
-                SqlParameter p = new SqlParameter("@ma", Convert.ToString(txtMaphieumuon.Text));
+                SqlParameter p = new SqlParameter("@ma", Convert.ToString(txtMaphieutra.Text));
                 cmd.Parameters.Add(p);
                 count = cmd.ExecuteNonQuery();
             }
@@ -213,12 +209,14 @@ namespace QuanLiThuVien
                 setNull();
             }
             else
-                MessageBox.Show("Phiếu mượn đang chứa sách , không thể xóa!");
+                MessageBox.Show("Xóa không thành công!");
             conn.CloseDB();
         }
 
-
-
-      
+        private void btnHuy_Click(object sender, EventArgs e)
+        {
+            KhoaDieuKhien();
+            setNull();
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace QuanLiThuVien
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new THEDOCGIA());
+            Application.Run(new PHIEUTRA());
         }
     }
 }

@@ -282,4 +282,39 @@ create table cuonsach(
 							delete from thedocgia
 							where ma_thedocgia=@ma
 						end
+	-- trigger mã phiếu trả tự động tăng
+		create trigger trg_nextIDphieutra on phieutra for insert
+	as
+		begin
+			declare @lastID varchar(50)
+			set @lastID= (select top 1 ma_phieutra from phieutra order by ma_phieutra desc)
+			update phieutra
+			set ma_phieutra = dbo.func_nextID(@lastID,'PT',6)
+			where ma_phieutra= ''
+	end
+	--thêm phiếu trả
+	create proc phieutra_them
+		@mapt varchar(10), @mapm varchar(10), @ngaytrathat date, @tienphat float
+	as
+		begin
+			insert into phieutra (ma_phieutra,ma_phieumuon, ngaytrathat, tienphat) values(@mapt,@mapm, @ngaytrathat,@tienphat)
+		end
+	-- sửa phiếu trả
+		create proc phieutra_sua
+		@mapt varchar(10), @mapm varchar(10), @ngaytrathat date, @tienphat float
+	as
+		begin
+			update phieutra
+			set ma_phieutra=@mapt, ngaytrathat= @ngaytrathat, tienphat = @tienphat
+			where ma_phieutra=@mapt
+		end
+		--xóa phiếu trả
+				create proc phieutra_xoa
+					@ma varchar(10)
+				as
 			
+						begin
+							delete from phieutra
+							where ma_phieutra=@ma
+						end
+	
