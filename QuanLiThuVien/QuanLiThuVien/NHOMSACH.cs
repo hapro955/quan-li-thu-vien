@@ -50,9 +50,8 @@ namespace QuanLiThuVien
         private void LoadData()
         {
             string sql = "select * from nhomsach";
-            DataTable dt = new DataTable();
-            dt = conn.GetDataTable(sql);
-            dgvNS.DataSource = dt;
+           
+            dgvNS.DataSource = conn.GetDataTable(sql);
         }
 
         private void NHOMSACH_Load(object sender, EventArgs e)

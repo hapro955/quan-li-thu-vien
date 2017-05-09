@@ -318,3 +318,62 @@ create table cuonsach(
 							where ma_phieutra=@ma
 						end
 	
+	--thêm đăng kí
+	create proc dangki_them
+		@mads varchar(10), @madg varchar(10), @ngaydangki date, @ghichu nvarchar(100)
+	as
+		begin
+			insert into dangki(ma_dausach,ma_docgia,ngaydangki, ghichu) values(@mads,@madg,@ngaydangki,@ghichu)
+		end
+	--sửa đăng kí
+	create proc dangki_sua
+		@mads varchar(10), @madg varchar(10), @ngaydangki date, @ghichu nvarchar(100)
+	as
+		begin
+			update dangki
+			set ngaydangki=@ngaydangki, ghichu=@ghichu
+			where ma_docgia=@madg and ma_dausach=@mads
+		end
+	--xóa đăng kí
+	create proc dangki_xoa
+	@mads varchar(10), @madg varchar(10)
+	as
+		begin
+			delete from dangki
+			where ma_docgia=@madg and ma_dausach=@mads
+		end
+		-- trigger mã cuốn sách tự động tăng
+		create trigger trg_nextIDcuonsach on cuonsach for insert
+	as
+		begin
+			declare @lastID varchar(50)
+			set @lastID= (select top 1 ma_cuonsach from cuonsach order by ma_cuonsach desc)
+			update cuonsach
+			set ma_cuonsach = dbo.func_nextID(@lastID,'CS',6)
+			where ma_cuonsach= ''
+	end
+	
+	--thêm cuốn sách
+	create proc cuonsach_them
+		@macs varchar(10), @mapm varchar(10), @mads varchar(10) , @tt nvarchar(30)
+	as
+		begin
+			insert into cuonsach(ma_cuonsach,ma_phieumuon,ma_dausach,tinhtrang) values(@macs,@mapm,@mads,@tt)
+		end
+	--sửa cuốn sách
+	create proc cuonsach_sua
+			@macs varchar(10), @mapm varchar(10), @mads varchar(10) , @tt nvarchar(30)
+	as
+		begin
+			update cuonsach
+			set ma_phieumuon=@mapm, ma_dausach=@mads,tinhtrang=@tt
+			where ma_cuonsach=@macs
+		end
+	--xóa cuốn sách
+	create proc cuonsach_xoa
+	@macs varchar(10)
+	as
+		begin
+			delete from cuonsach
+			where ma_cuonsach= @macs
+		end

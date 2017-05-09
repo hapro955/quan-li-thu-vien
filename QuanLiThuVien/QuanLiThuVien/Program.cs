@@ -16,7 +16,7 @@ namespace QuanLiThuVien
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new PHIEUTRA());
+            Application.Run(new MENU());
         }
     }
 }

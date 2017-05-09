@@ -10,11 +10,11 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 namespace QuanLiThuVien
 {
-    public partial class PHIEUMUON : Form
+    public partial class CUONSACH : Form
     {
         ConnectDB conn = new ConnectDB();
         bool themmoi;
-        public PHIEUMUON()
+        public CUONSACH()
         {
             InitializeComponent();
         }
@@ -25,12 +25,12 @@ namespace QuanLiThuVien
         }
         void KhoaDieuKhien()
         {
-            txtMadocgia.Enabled = false;
-            txtMaphieumuon.Enabled = false;
-            dtpNgaymuon.Enabled = false;
-            dtpNgaytra.Enabled = false;
+            txtMaCuonSach.Enabled = false;
+            txtTinhTrang.Enabled = false;
+            cmbMaDauSach.Enabled = false;
+            cmbMaPhieuMuon.Enabled = false;
 
-            bntThem.Enabled = true;
+            btnThem.Enabled = true;
             btnSua.Enabled = true;
             btnXoa.Enabled = true;
             btnLuu.Enabled = false;
@@ -39,12 +39,13 @@ namespace QuanLiThuVien
         }
         void MoDieuKhien()
         {
-            txtMadocgia.Enabled = true;
-            txtMaphieumuon.Enabled = true;
-            dtpNgaymuon.Enabled = true;
-            dtpNgaytra.Enabled = true;
+            txtMaCuonSach.Enabled = true;
+            txtTinhTrang.Enabled = true;
+            cmbMaDauSach.Enabled = true;
+            cmbMaPhieuMuon.Enabled = true;
 
-            bntThem.Enabled = false;
+
+            btnThem.Enabled = false;
             btnSua.Enabled = false;
             btnXoa.Enabled = false;
             btnLuu.Enabled = true;
@@ -53,38 +54,52 @@ namespace QuanLiThuVien
         }
         void setNull()
         {
-            txtMadocgia.Text = "Mã độc giả";
-            txtMaphieumuon.Text = "Mã phiếu mượn";
+            txtTinhTrang.Text = "Tình trạng";
+            txtMaCuonSach.Text = "Mã cuốn sách";
+            cmbMaDauSach.Text = "Đầu sách";
+            cmbMaPhieuMuon.Text = "Mã phiếu mượn";
         }
-        public void LoadData()
+        private void LoadData()
+        {
+            string sql = "select * from cuonsach";
+            dgvCuonSach.DataSource = conn.GetDataTable(sql);
+        }
+        private void show_ComboPhieuMuon()
         {
             string sql = "select * from phieumuon";
-          
-            dgvPhieumuon.DataSource = conn.GetDataTable(sql);
+            cmbMaPhieuMuon.DataSource = conn.GetDataTable(sql);
+            cmbMaPhieuMuon.ValueMember = "ma_phieumuon";
+            cmbMaPhieuMuon.DisplayMember = "ma_phieumuon";
+
         }
-        private void PHIEUMUON_Load(object sender, EventArgs e)
+        private void show_ComboDauSach()
+        {
+            string sql = "select * from dausach";
+            cmbMaDauSach.DataSource = conn.GetDataTable(sql);
+            cmbMaDauSach.ValueMember = "ma_dausach";
+            cmbMaDauSach.DisplayMember = "tendausach";
+
+        }
+
+        private void CUONSACH_Load(object sender, EventArgs e)
         {
             LoadData();
+            show_ComboDauSach();
+            show_ComboPhieuMuon();
             KhoaDieuKhien();
             setNull();
         }
 
-        private void btnHuy_Click(object sender, EventArgs e)
-        {
-            KhoaDieuKhien();
-            setNull();
-        }
-
-        private void dgvPhieumuon_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void dgvCuonSach_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
                 if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
-                {                   
-                    txtMaphieumuon.Text = Convert.ToString(dgvPhieumuon.CurrentRow.Cells[1].Value);
-                    txtMadocgia.Text = Convert.ToString(dgvPhieumuon.CurrentRow.Cells[2].Value);
-                    dtpNgaymuon.Text = Convert.ToString(dgvPhieumuon.CurrentRow.Cells[3].Value);
-                    dtpNgaytra.Text = Convert.ToString(dgvPhieumuon.CurrentRow.Cells[4].Value);
+                {
+                    txtMaCuonSach.Text = Convert.ToString(dgvCuonSach.CurrentRow.Cells[1].Value);
+                    cmbMaDauSach.Text = Convert.ToString(dgvCuonSach.CurrentRow.Cells[2].Value);
+                    cmbMaPhieuMuon.Text = Convert.ToString(dgvCuonSach.CurrentRow.Cells[3].Value);
+                    txtTinhTrang.Text = Convert.ToString(dgvCuonSach.CurrentRow.Cells[4].Value);  
                 }
             }
             catch
@@ -93,27 +108,26 @@ namespace QuanLiThuVien
             }
         }
 
-        private void dgvPhieumuon_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        private void dgvCuonSach_RowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
         {
-            dgvPhieumuon.Rows[e.RowIndex].Cells[0].Value = e.RowIndex + 1;
+            dgvCuonSach.Rows[e.RowIndex].Cells[0].Value = e.RowIndex + 1; 
         }
 
-        private void bntThem_Click(object sender, EventArgs e)
+        private void btnThem_Click(object sender, EventArgs e)
         {
             themmoi = true;
             MoDieuKhien();
-            setNull();
-            txtMaphieumuon.Enabled = false;
-            txtMaphieumuon.Text = "";
-            txtMadocgia.Text = "";
-
+            txtMaCuonSach.Enabled = false;
+            txtTinhTrang.Text = "";
+            txtMaCuonSach.Text = "";
+            
         }
 
         private void btnSua_Click(object sender, EventArgs e)
         {
             themmoi = false;
             MoDieuKhien();
-            txtMaphieumuon.Enabled = false;
+            txtMaCuonSach.Enabled = false;
         }
 
         private void btnLuu_Click(object sender, EventArgs e)
@@ -124,16 +138,18 @@ namespace QuanLiThuVien
                 int count = 0;
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("phieumuon_them", ConnectDB.connect);
+
+                    SqlCommand cmd = new SqlCommand("cuonsach_them", ConnectDB.connect);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    SqlParameter p = new SqlParameter("@mapm", Convert.ToString(txtMaphieumuon.Text));
+                    SqlParameter p = new SqlParameter("@macs", Convert.ToString(txtMaCuonSach.Text));
                     cmd.Parameters.Add(p);
-                    p = new SqlParameter("@madg", Convert.ToString(txtMadocgia.Text));
+                    p = new SqlParameter("@mapm", Convert.ToString(cmbMaPhieuMuon.SelectedValue));
                     cmd.Parameters.Add(p);
-                    p = new SqlParameter("@ngaym", Convert.ToString(dtpNgaymuon.Value));
+                    p = new SqlParameter("@mads", Convert.ToString(cmbMaDauSach.SelectedValue));
                     cmd.Parameters.Add(p);
-                    p = new SqlParameter("@ngayt", Convert.ToString(dtpNgaytra.Value));
+                    p = new SqlParameter("@tt", Convert.ToString(txtTinhTrang.Text));
                     cmd.Parameters.Add(p);
+                    
                     count = cmd.ExecuteNonQuery();
                 }
                 catch
@@ -158,15 +174,15 @@ namespace QuanLiThuVien
                 try
                 {
 
-                    SqlCommand cmd = new SqlCommand("phieumuon_sua", ConnectDB.connect);
+                    SqlCommand cmd = new SqlCommand("cuonsach_sua", ConnectDB.connect);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    SqlParameter p = new SqlParameter("@mapm", Convert.ToString(txtMaphieumuon.Text));
+                    SqlParameter p = new SqlParameter("@macs", Convert.ToString(txtMaCuonSach.Text));
                     cmd.Parameters.Add(p);
-                    p = new SqlParameter("@madg", Convert.ToString(txtMadocgia.Text));
+                    p = new SqlParameter("@mapm", Convert.ToString(cmbMaPhieuMuon.SelectedValue));
                     cmd.Parameters.Add(p);
-                    p = new SqlParameter("@ngaym", Convert.ToString(dtpNgaymuon.Value));
+                    p = new SqlParameter("@mads", Convert.ToString(cmbMaDauSach.SelectedValue));
                     cmd.Parameters.Add(p);
-                    p = new SqlParameter("@ngayt", Convert.ToString(dtpNgaytra.Value));
+                    p = new SqlParameter("@tt", Convert.ToString(txtTinhTrang.Text));
                     cmd.Parameters.Add(p);
                     count = cmd.ExecuteNonQuery();
 
@@ -194,9 +210,9 @@ namespace QuanLiThuVien
             int count = 0;
             try
             {
-                SqlCommand cmd = new SqlCommand("phieumuon_xoa", ConnectDB.connect);
+                SqlCommand cmd = new SqlCommand("cuonsach_xoa", ConnectDB.connect);
                 cmd.CommandType = CommandType.StoredProcedure;
-                SqlParameter p = new SqlParameter("@ma", Convert.ToString(txtMaphieumuon.Text));
+                SqlParameter p = new SqlParameter("@macs", Convert.ToString(txtMaCuonSach.Text));
                 cmd.Parameters.Add(p);
                 count = cmd.ExecuteNonQuery();
             }
@@ -212,12 +228,14 @@ namespace QuanLiThuVien
                 setNull();
             }
             else
-                MessageBox.Show("Phiếu mượn đang chứa sách , không thể xóa!");
+                MessageBox.Show("Xóa không thành công!");
             conn.CloseDB();
         }
 
-
-
-      
+        private void btnHuy_Click(object sender, EventArgs e)
+        {
+            KhoaDieuKhien();
+            setNull();
+        }
     }
 }

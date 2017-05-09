@@ -61,9 +61,8 @@ namespace QuanLiThuVien
         public void LoadData()
         {
             string sql = "select * from docgia";
-            DataTable dt = new DataTable();
-            dt = conn.GetDataTable(sql);
-            dgvDocgia.DataSource = dt;
+            
+            dgvDocgia.DataSource = conn.GetDataTable(sql);
         }
 
         private void DOCGIA_Load(object sender, EventArgs e)

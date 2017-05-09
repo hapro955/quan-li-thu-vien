@@ -46,11 +46,35 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectDB.cs" />
+    <Compile Include="CUONSACH.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CUONSACH.Designer.cs">
+      <DependentUpon>CUONSACH.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DANGKI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DANGKI.Designer.cs">
+      <DependentUpon>DANGKI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DAUSACH.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DAUSACH.Designer.cs">
+      <DependentUpon>DAUSACH.cs</DependentUpon>
+    </Compile>
     <Compile Include="DOCGIA.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DOCGIA.Designer.cs">
       <DependentUpon>DOCGIA.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MENU.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MENU.Designer.cs">
+      <DependentUpon>MENU.cs</DependentUpon>
     </Compile>
     <Compile Include="NHOMSACH.cs">
       <SubType>Form</SubType>
@@ -78,8 +102,20 @@
     <Compile Include="THEDOCGIA.Designer.cs">
       <DependentUpon>THEDOCGIA.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="CUONSACH.resx">
+      <DependentUpon>CUONSACH.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DANGKI.resx">
+      <DependentUpon>DANGKI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DAUSACH.resx">
+      <DependentUpon>DAUSACH.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DOCGIA.resx">
       <DependentUpon>DOCGIA.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MENU.resx">
+      <DependentUpon>MENU.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NHOMSACH.resx">
       <DependentUpon>NHOMSACH.cs</DependentUpon>
